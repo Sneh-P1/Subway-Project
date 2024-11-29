@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subway Order Form</title>
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="formContainer">
+        <div class="orderForm">
+            <h1>Subway Order Form</h1>
+            <label for="classSelect">Class:</label>
+            <select id="classSelect">
+                <option value="Kindergarten">Kindergarten</option>
+                <option value="1st Grade">1st Grade</option>
+                <option value="2nd Grade">2nd Grade</option>
+                <!-- Add more options as needed -->
+            </select>
+
+            <h2>Add Student</h2>
+            <label for="studentName">Student Name:</label>
+            <input type="text" id="studentName">
+
+            <label for="subType">Type of Sub:</label>
+            <select id="subType">
+                <option value="Ham">Ham</option>
+                <option value="Turkey">Turkey</option>
+                <option value="Veggie">Veggie</option>
+            </select>
+
+            <label for="chipsType">Type of Chips:</label>
+            <select id="chipsType">
+                <option value="Regular">Regular</option>
+                <option value="Barbecue">Barbecue</option>
+                <option value="Salt & Vinegar">Salt & Vinegar</option>
+            </select>
+
+            <label for="cookieType">Type of Cookie:</label>
+            <select id="cookieType">
+                <option value="Chocolate Chip">Chocolate Chip</option>
+                <option value="Oatmeal Raisin">Oatmeal Raisin</option>
+                <option value="Double Chocolate">Double Chocolate</option>
+            </select>
+
+            <button onclick="addStudent()">Add Student</button>
+            <button onclick="exportToPDF()">Export to PDF</button>
+        </div>
+        <div class="studentList">
+            <h2>Current List</h2>
+            <ul id="studentList"></ul>
+        </div>
+    </div>
+</body>
+</html>
