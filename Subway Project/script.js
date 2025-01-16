@@ -90,24 +90,47 @@ function clearForm() {
 function exportToPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.width;
-    const pageHeight = doc.internal.pageSize.height;
-    const margin = 10;
-    const lineHeight = 10;
-    let y = margin;
 
-    students.forEach((student, index) => {
-        const studentDetails = `Name: ${student.name}, Class: ${student.class}, Sub: ${student.sub}, Chips: ${student.chips}, Cookie: ${student.cookie}`;
-        if (y + lineHeight > pageHeight - margin) {
-            doc.addPage();
-            y = margin;
-        }
-        doc.text(studentDetails, margin, y);
-        y += lineHeight;
+    // Get the student list table
+    const table = document.getElementById('studentTable');
+    const tableHTML = `
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 15px;
+            }
+            th, td {
+                padding: 10px;
+                text-align: left;
+                border: 1px solid #ddd;
+            }
+            th {
+                background-color: #4CAF50;
+                color: #fff;
+                text-transform: uppercase;
+            }
+            tr:nth-child(even) td {
+                background-color: #f9f9f9;
+            }
+            tr:hover td {
+                background-color: #f1f8e9;
+            }
+        </style>
+        ${table.outerHTML}
+    `;
+
+    // Add the styled HTML table to the PDF
+    doc.html(tableHTML, {
+        callback: function (doc) {
+            doc.save("StudentList.pdf");
+        },
+        x: 10,
+        y: 10,
+        html2canvas: { scale: 0.5 }, // Adjust scaling for better fit
     });
-
-    doc.save("Subway_Order_List.pdf");
 }
+
 
 // Event Listeners
 document.getElementById("studentForm").addEventListener("submit", addStudent);
