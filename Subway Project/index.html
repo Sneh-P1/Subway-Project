@@ -9,48 +9,79 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
 <body>
-    <div class="formContainer">
-        <div class="orderForm">
-            <h1>Subway Order Form</h1>
-            <label for="classSelect">Class:</label>
-            <select id="classSelect">
-                <option value="Kindergarten">Kindergarten</option>
-                <option value="1st Grade">1st Grade</option>
-                <option value="2nd Grade">2nd Grade</option>
-                <!-- Add more options as needed -->
-            </select>
-
-            <h2>Add Student</h2>
-            <label for="studentName">Student Name:</label>
-            <input type="text" id="studentName">
-
-            <label for="subType">Type of Sub:</label>
-            <select id="subType">
-                <option value="Ham">Ham</option>
-                <option value="Turkey">Turkey</option>
-                <option value="Veggie">Veggie</option>
-            </select>
-
-            <label for="chipsType">Type of Chips:</label>
-            <select id="chipsType">
-                <option value="Regular">Regular</option>
-                <option value="Barbecue">Barbecue</option>
-                <option value="Salt & Vinegar">Salt & Vinegar</option>
-            </select>
-
-            <label for="cookieType">Type of Cookie:</label>
-            <select id="cookieType">
-                <option value="Chocolate Chip">Chocolate Chip</option>
-                <option value="Oatmeal Raisin">Oatmeal Raisin</option>
-                <option value="Double Chocolate">Double Chocolate</option>
-            </select>
-
-            <button onclick="addStudent()">Add Student</button>
-            <button onclick="exportToPDF()">Export to PDF</button>
-        </div>
-        <div class="studentList">
-            <h2>Current List</h2>
-            <ul id="studentList"></ul>
+    <div class="container">
+        <h1>Subway Order Form</h1>
+        <div class="content">
+            <div class="orderForm">
+                <h2>Add Student</h2>
+                <form id="studentForm">
+                    <div class="form-group">
+                        <label for="classSelect">Class:</label>
+                        <select id="classSelect" required>
+                            <option value="">Select class</option>
+                            <option value="Kindergarten">Kindergarten</option>
+                            <option value="1st Grade">1st Grade</option>
+                            <option value="2nd Grade">2nd Grade</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentName">Student Name:</label>
+                        <input type="text" id="studentName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subType">Type of Sub:</label>
+                        <select id="subType" required>
+                            <option value="">Select sub type</option>
+                            <option value="Ham">Ham</option>
+                            <option value="Turkey">Turkey</option>
+                            <option value="Veggie">Veggie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="chipsType">Type of Chips:</label>
+                        <select id="chipsType" required>
+                            <option value="">Select chips type</option>
+                            <option value="Regular">Regular</option>
+                            <option value="Barbecue">Barbecue</option>
+                            <option value="Salt & Vinegar">Salt & Vinegar</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cookieType">Type of Cookie:</label>
+                        <select id="cookieType" required>
+                            <option value="">Select cookie type</option>
+                            <option value="Chocolate Chip">Chocolate Chip</option>
+                            <option value="Oatmeal Raisin">Oatmeal Raisin</option>
+                            <option value="Double Chocolate">Double Chocolate</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">Add Student</button>
+                </form>
+            </div>
+            <div class="studentList">
+                <h2>Student List</h2>
+                <table id="studentTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Class</th>
+                            <th>Sub</th>
+                            <th>Chips</th>
+                            <th>Cookie</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody">
+                        <!-- Student rows will be added here dynamically -->
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <button id="prevPage" class="btn" disabled>Previous</button>
+                    <span id="pageInfo">Page 1 of 1</span>
+                    <button id="nextPage" class="btn" disabled>Next</button>
+                </div>
+                <button onclick="exportToPDF()" class="btn">Export to PDF</button>
+            </div>
         </div>
     </div>
 </body>
