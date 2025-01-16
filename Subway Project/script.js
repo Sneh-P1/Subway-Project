@@ -1,6 +1,9 @@
 let students = [];
+const studentsPerPage = 5;
+let currentPage = 1;
 
-function addStudent() {
+function addStudent(event) {
+    event.preventDefault();
     const classSelect = document.getElementById("classSelect").value;
     const studentName = document.getElementById("studentName").value.trim();
     const subType = document.getElementById("subType").value;
@@ -69,11 +72,7 @@ function deleteStudent(id) {
 }
 
 function clearForm() {
-    document.getElementById("studentName").value = "";
-    document.getElementById("classSelect").value = "Kindergarten";
-    document.getElementById("subType").value = "Ham";
-    document.getElementById("chipsType").value = "Regular";
-    document.getElementById("cookieType").value = "Chocolate Chip";
+    document.getElementById("studentForm").reset();
 }
 
 function exportToPDF() {
@@ -148,4 +147,8 @@ function exportToPDF() {
     doc.save("Subway_Order_List.pdf");
 }
 
-// THIS IS JSUT S TEST COMMENT
+// Event Listeners
+document.getElementById("studentForm").addEventListener("submit", addStudent);
+
+// Initial display
+displayStudents();
