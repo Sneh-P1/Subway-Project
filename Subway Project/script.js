@@ -1,6 +1,4 @@
 let students = [];
-let currentPage = 1;
-const itemsPerPage = 5;
 
 function addStudent() {
     const classSelect = document.getElementById("classSelect").value;
@@ -24,11 +22,11 @@ function addStudent() {
     };
 
     students.push(student);
-    renderStudentList();
+    displayStudents();
     clearForm();
 }
 
-function renderStudentList() {
+function displayStudents() {
     const studentList = document.getElementById("studentList");
     studentList.innerHTML = "";
 
@@ -38,33 +36,36 @@ function renderStudentList() {
         return acc;
     }, {});
 
-    const start = (currentPage - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    const studentsToShow = Object.entries(groupedByClass).flatMap(([className, classStudents]) => {
-        return classStudents.map(student => ({ className, ...student }));
-    }).slice(start, end);
+    for (const [className, classStudents] of Object.entries(groupedByClass)) {
+        const classHeader = document.createElement("h3");
+        classHeader.textContent = className;
+        studentList.appendChild(classHeader);
 
-    studentsToShow.forEach((student, index) => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-            <strong>${student.name}</strong>
-            <div class="studentDetails">
-                <span>Class: ${student.className}</span>
-                <span>Sub: ${student.sub}</span>
-                <span>Chips: ${student.chips}</span>
-                <span>Cookie: ${student.cookie}</span>
-            </div>
-            <button class="deleteButton" onclick="deleteStudent(${student.id})">X</button>
-        `;
-        studentList.appendChild(li);
-    });
+        const ul = document.createElement("ul");
+        ul.classList.add("classList");
 
-    updatePagination();
+        classStudents.forEach((student) => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+                <strong>${student.name}</strong>
+                <div class="studentDetails">
+                    <span>Class: ${student.class}</span>
+                    <span>Sub: ${student.sub}</span>
+                    <span>Chips: ${student.chips}</span>
+                    <span>Cookie: ${student.cookie}</span>
+                </div>
+                <button class="deleteButton" onclick="deleteStudent(${student.id})">X</button>
+            `;
+            ul.appendChild(li);
+        });
+
+        studentList.appendChild(ul);
+    }
 }
 
 function deleteStudent(id) {
     students = students.filter((student) => student.id !== id);
-    renderStudentList();
+    displayStudents();
 }
 
 function clearForm() {
@@ -75,53 +76,31 @@ function clearForm() {
     document.getElementById("cookieType").value = "Chocolate Chip";
 }
 
-// Pagination Functions
-function updatePagination() {
-    const totalPages = Math.ceil(students.length / itemsPerPage);
-    document.getElementById("pageInfo").textContent = `Page ${currentPage} of ${totalPages}`;
-
-    document.querySelector(".prevPage").disabled = currentPage === 1;
-    document.querySelector(".nextPage").disabled = currentPage === totalPages;
-}
-
-function nextPage() {
-    const totalPages = Math.ceil(students.length / itemsPerPage);
-    if (currentPage < totalPages) {
-        currentPage++;
-        renderStudentList();
-    }
-}
-
-function prevPage() {
-    if (currentPage > 1) {
-        currentPage--;
-        renderStudentList();
-    }
-}
-
 function exportToPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.width;
-    const pageHeight = doc.internal.pageSize.height;
-    const margin = 10;
-    const boxWidth = 80;
-    const boxHeight = 50;
-    const columnGap = 10;
-    const rowGap = 10;
-    let x = margin;
-    let y = margin;
+    const pageWidth = doc.internal.pageSize.width; // Page width
+    const pageHeight = doc.internal.pageSize.height; // Page height
+    const margin = 10; // Margin for the page
+    const boxWidth = 80; // Width of each student box
+    const boxHeight = 50; // Height of each student box
+    const columnGap = 10; // Space between columns
+    const rowGap = 10; // Space between rows
+    let x = margin; // Starting X position
+    let y = margin; // Starting Y position
 
+    // Group students by class
     const groupedByClass = students.reduce((acc, student) => {
         if (!acc[student.class]) acc[student.class] = [];
         acc[student.class].push(student);
         return acc;
     }, {});
 
-    let isFirstClass = true;
+    let isFirstClass = true; // Track if this is the first class to avoid unnecessary spacing
 
     for (const [className, classStudents] of Object.entries(groupedByClass)) {
         if (!isFirstClass) {
+            // Add extra spacing between classes only if this isn't the first class
             y += boxHeight + rowGap;
             if (y + boxHeight > pageHeight - margin) {
                 doc.addPage();
@@ -130,11 +109,13 @@ function exportToPDF() {
             }
         }
 
+        // Add Class Header
         doc.setFontSize(12);
         doc.text(`Class: ${className}`, margin, y);
         y += 10;
 
         classStudents.forEach((student) => {
+            // Check if the current position exceeds the page height
             if (y + boxHeight > pageHeight - margin) {
                 doc.addPage();
                 x = margin;
@@ -143,22 +124,28 @@ function exportToPDF() {
                 y += 10;
             }
 
-            doc.rect(x, y, boxWidth, boxHeight);
+            // Draw the box for the student
+            doc.rect(x, y, boxWidth, boxHeight); // Draw the border of the box
             doc.text(`Name: ${student.name}`, x + 5, y + 10);
             doc.text(`Sub: ${student.sub}`, x + 5, y + 20);
             doc.text(`Chips: ${student.chips}`, x + 5, y + 30);
             doc.text(`Cookie: ${student.cookie}`, x + 5, y + 40);
 
+            // Update x and y for the next student
             x += boxWidth + columnGap;
+
+            // If x exceeds the page width, move to the next row
             if (x + boxWidth > pageWidth - margin) {
                 x = margin;
                 y += boxHeight + rowGap;
             }
         });
 
-        isFirstClass = false;
-        x = margin;
+        isFirstClass = false; // Mark that the first class has been processed
+        x = margin; // Reset x after finishing the class
     }
 
     doc.save("Subway_Order_List.pdf");
 }
+
+// THIS IS JSUT S TEST COMMENT
