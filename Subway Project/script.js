@@ -90,47 +90,74 @@ function clearForm() {
 function exportToPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.width; // Page width
+    const pageHeight = doc.internal.pageSize.height; // Page height
+    const margin = 10; // Margin for the page
+    const boxWidth = 80; // Width of each student box
+    const boxHeight = 50; // Height of each student box
+    const columnGap = 10; // Space between columns
+    const rowGap = 10; // Space between rows
+    let x = margin; // Starting X position
+    let y = margin; // Starting Y position
 
-    // Get the student list table
-    const table = document.getElementById('studentTable');
-    const tableHTML = `
-        <style>
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-bottom: 15px;
-            }
-            th, td {
-                padding: 10px;
-                text-align: left;
-                border: 1px solid #ddd;
-            }
-            th {
-                background-color: #4CAF50;
-                color: #fff;
-                text-transform: uppercase;
-            }
-            tr:nth-child(even) td {
-                background-color: #f9f9f9;
-            }
-            tr:hover td {
-                background-color: #f1f8e9;
-            }
-        </style>
-        ${table.outerHTML}
-    `;
+    // Group students by class
+    const groupedByClass = students.reduce((acc, student) => {
+        if (!acc[student.class]) acc[student.class] = [];
+        acc[student.class].push(student);
+        return acc;
+    }, {});
 
-    // Add the styled HTML table to the PDF
-    doc.html(tableHTML, {
-        callback: function (doc) {
-            doc.save("StudentList.pdf");
-        },
-        x: 10,
-        y: 10,
-        html2canvas: { scale: 0.5 }, // Adjust scaling for better fit
-    });
+    let isFirstClass = true; // Track if this is the first class to avoid unnecessary spacing
+
+    for (const [className, classStudents] of Object.entries(groupedByClass)) {
+        if (!isFirstClass) {
+            // Add extra spacing between classes only if this isn't the first class
+            y += boxHeight + rowGap;
+            if (y + boxHeight > pageHeight - margin) {
+                doc.addPage();
+                x = margin;
+                y = margin;
+            }
+        }
+
+        // Add Class Header
+        doc.setFontSize(12);
+        doc.text(`Class: ${className}`, margin, y);
+        y += 10;
+
+        classStudents.forEach((student) => {
+            // Check if the current position exceeds the page height
+            if (y + boxHeight > pageHeight - margin) {
+                doc.addPage();
+                x = margin;
+                y = margin;
+                doc.text(`Class: ${className}`, margin, y);
+                y += 10;
+            }
+
+            // Draw the box for the student
+            doc.rect(x, y, boxWidth, boxHeight); // Draw the border of the box
+            doc.text(`Name: ${student.name}`, x + 5, y + 10);
+            doc.text(`Sub: ${student.sub}`, x + 5, y + 20);
+            doc.text(`Chips: ${student.chips}`, x + 5, y + 30);
+            doc.text(`Cookie: ${student.cookie}`, x + 5, y + 40);
+
+            // Update x and y for the next student
+            x += boxWidth + columnGap;
+
+            // If x exceeds the page width, move to the next row
+            if (x + boxWidth > pageWidth - margin) {
+                x = margin;
+                y += boxHeight + rowGap;
+            }
+        });
+
+        isFirstClass = false; // Mark that the first class has been processed
+        x = margin; // Reset x after finishing the class
+    }
+
+    doc.save("Subway_Order_List.pdf");
 }
-
 
 // Event Listeners
 document.getElementById("studentForm").addEventListener("submit", addStudent);
