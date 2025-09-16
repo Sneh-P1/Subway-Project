@@ -204,6 +204,10 @@ function exportToPDF() {
 }
 
 
-// Event Listeners
+// ===== EVENT LISTENERS AND INITIALIZATION =====
+
+// Set up form submission event listener
 document.getElementById("studentForm").addEventListener("submit", addStudent);
+
+// Initialize the display when the page loads
 displayStudents();
