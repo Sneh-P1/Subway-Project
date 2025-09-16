@@ -83,9 +83,14 @@
                     <button type="submit" class="btn">Add Student</button>
                 </form>
             </div>
+            
+            <!-- Right side: Student list and management -->
             <div class="studentList">
                 <h2>Student List</h2>
+                
+                <!-- Table to display all students and their orders -->
                 <table id="studentTable">
+                    <!-- Table header with column names -->
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -96,15 +101,20 @@
                             <th>Action</th>
                         </tr>
                     </thead>
+                    <!-- Table body where student data will be dynamically inserted -->
                     <tbody id="studentTableBody">
-                        <!-- Student rows will be added here dynamically -->
+                        <!-- Student rows will be added here dynamically by JavaScript -->
                     </tbody>
                 </table>
+                
+                <!-- Pagination controls for navigating through student list -->
                 <div class="pagination">
                     <button id="prevPage" class="btn" disabled>Previous</button>
                     <span id="pageInfo">Page 1 of 1</span>
                     <button id="nextPage" class="btn" disabled>Next</button>
                 </div>
+                
+                <!-- Button to export the student list to PDF -->
                 <button onclick="exportToPDF()" class="btn">Export to PDF</button>
             </div>
         </div>
