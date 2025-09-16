@@ -1,20 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Basic HTML5 document setup -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subway Order Form</title>
+    
+    <!-- Load our custom JavaScript file with defer to ensure DOM is loaded first -->
     <script src="script.js" defer></script>
+    
+    <!-- Link to our custom CSS stylesheet -->
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Load jsPDF library from CDN for PDF export functionality -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
 <body>
+    <!-- Main container for the entire application -->
     <div class="container">
+        <!-- Main heading for the application -->
         <h1>Subway Order Form</h1>
+
+        <!-- Content wrapper that contains both the form and student list -->
         <div class="content">
+            <!-- Left side: Student input form -->
             <div class="orderForm">
                 <h2>Add Student</h2>
+                
+                <!-- Form for adding new students with their order details -->
                 <form id="studentForm">
+                    <!-- Class selection dropdown -->
                     <div class="form-group">
                         <label for="classSelect">Class:</label>
                         <select id="classSelect" required>
@@ -24,10 +39,14 @@
                             <option value="2nd Grade">2nd Grade</option>
                         </select>
                     </div>
+                    
+                    <!-- Student name input field -->
                     <div class="form-group">
                         <label for="studentName">Student Name:</label>
                         <input type="text" id="studentName" required>
                     </div>
+                    
+                    <!-- Sub sandwich type selection -->
                     <div class="form-group">
                         <label for="subType">Type of Sub:</label>
                         <select id="subType" required>
@@ -37,6 +56,8 @@
                             <option value="Veggie">Veggie</option>
                         </select>
                     </div>
+                    
+                    <!-- Chips type selection -->
                     <div class="form-group">
                         <label for="chipsType">Type of Chips:</label>
                         <select id="chipsType" required>
@@ -46,6 +67,8 @@
                             <option value="Salt & Vinegar">Salt & Vinegar</option>
                         </select>
                     </div>
+                    
+                    <!-- Cookie type selection -->
                     <div class="form-group">
                         <label for="cookieType">Type of Cookie:</label>
                         <select id="cookieType" required>
@@ -55,6 +78,8 @@
                             <option value="Double Chocolate">Double Chocolate</option>
                         </select>
                     </div>
+                    
+                    <!-- Submit button to add the student -->
                     <button type="submit" class="btn">Add Student</button>
                 </form>
             </div>
